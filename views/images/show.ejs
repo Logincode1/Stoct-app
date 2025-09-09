@@ -1,0 +1,31 @@
+<!-- views/images/show.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= image.title %></title>
+  </head>
+  <body>
+    <%- include('../partials/_navbar.ejs') %>
+
+    <h1><%= image.title %>
+
+    <% if (image.description) { %>
+    <p>Description: <%= image.description %></p>
+    <% } %>
+    <p>Current Category: <%= image.category %></p>
+
+  <a href="/images/<%= image._id %>/edit">
+      <button>Edit image</button>
+    </a>
+
+    <form
+  action="/images/<%= image._id %>?_method=DELETE"
+      method="POST"
+    >
+      <button type="submit">Delete this image</button>
+    </form>
+  </body>
+</html>

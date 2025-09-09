@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Images</title>
+  </head>
+  <body>
+    <%- include("../partials/_navbar.ejs") %>
+
+    <h1>Your Images</h1>
+  <a href="/images/new">
+      <button>Add an App</button>
+    </a>
+
+    <ul>
+  <% images.forEach((image)=>{ %>
+  <a href="/images/<%= image._id %>">
+          <li><%= image.title %> at <%= image.company %></li>
+        </a>
+      <% }) %>
+    </ul>
+  </body>
+</html>

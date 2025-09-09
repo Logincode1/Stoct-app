@@ -1,1 +1,0 @@
-# Stoct-app
