@@ -1,13 +1,5 @@
 const mongoose = require("mongoose");
 
-const imageSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  category: {
-    type: String,
-    enum: ["Personal", "Professional", "art", "meme"],
-  },
-});
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -18,7 +10,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  images: [imageSchema],
+  images: [{ type: mongoose.Schema.Types.ObjectId, ref: "Image" }],
 });
 
 const User = mongoose.model("User", userSchema);

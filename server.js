@@ -25,8 +25,14 @@ app.use(
     saveUninitialized: true,
   })
 );
-
+app.use(express.static(__dirname + '/public'));
 app.use(passUserToView);
+app.use("/auth", authController);
+app.use(isSignedIn);
+
+app.use("/images", imagesController);
+
+
 
 app.get("/", (req, res) => {
   // Check if the user is signed in
@@ -39,10 +45,6 @@ app.get("/", (req, res) => {
   }
 });
 
-app.use("/auth", authController);
-app.use(isSignedIn);
-
-app.use("/images", imagesController);
 
 db.on("connected", () => {
   console.clear();

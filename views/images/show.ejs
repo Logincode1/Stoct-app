@@ -2,30 +2,44 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= image.title %></title>
-  </head>
-  <body>
-    <%- include('../partials/_navbar.ejs') %>
 
-    <h1><%= image.title %>
+<head>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= image.title %>
+  </title>
+</head>
 
-    <% if (image.description) { %>
-    <p>Description: <%= image.description %></p>
-    <% } %>
-    <p>Current Category: <%= image.category %></p>
+<body>
+  <%- include('../partials/_navbar.ejs') %>
 
-  <a href="/images/<%= image._id %>/edit">
-      <button>Edit image</button>
-    </a>
+    <h1>
+      <%= image.title %>
 
-    <form
-  action="/images/<%= image._id %>?_method=DELETE"
-      method="POST"
-    >
-      <button type="submit">Delete this image</button>
-    </form>
-  </body>
+        <% if (image.description) { %>
+          <p>Description: <%= image.description %>
+          </p>
+          <% } %>
+            <p>Current Category: <%= image.category %>
+            </p>
+
+            <a href="/images/<%= image._id %>/edit">
+              <button>Edit image</button>
+            </a>
+
+            <form action="/images/<%= image._id %>?_method=DELETE" method="POST">
+              <button type="submit">Delete this image</button>
+            </form>
+
+
+
+            <div>Add a Comment</div>
+            <form action="/images/<%= image._id %>/comments" method="POST">
+              <textarea name="text" required></textarea>
+              <button type="submit">Add Comment</button>
+            </form>
+</body>
+
 </html>

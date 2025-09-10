@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Images</title>
@@ -10,13 +11,13 @@
 
     <h1>Your Images</h1>
   <a href="/images/new">
-      <button>Add an App</button>
+      <button>Add an Image</button>
     </a>
 
     <ul>
   <% images.forEach((image)=>{ %>
   <a href="/images/<%= image._id %>">
-          <li><%= image.title %> at <%= image.company %></li>
+          <li><%= image.title %>
         </a>
       <% }) %>
     </ul>
