@@ -10,9 +10,11 @@
     <%- include("../partials/_navbar.ejs") %>
 
     <h1>Your Images</h1>
-  <a href="/images/new">
-      <button>Add an Image</button>
-    </a>
+    <div class="center-add-image">
+      <a href="/images/new">
+        <button>Add an Image</button>
+      </a>
+    </div>
 
     <ul>
   <% images.forEach((image)=>{ %>

@@ -1,5 +1,3 @@
-<!-- views/images/show.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,32 +12,66 @@
 
 <body>
   <%- include('../partials/_navbar.ejs') %>
+    <div class="center-show-page">
+      <h1>
+        <%= image.title %>
+      </h1>
+      <% if (image.description) { %>
+        <p>
+          Description: <%= image.description %>
+            <span style="display:inline-block;width:50px;"></span>
+            Category: <%= image.category %>
+        </p>
+        <% } %>
 
-    <h1>
-      <%= image.title %>
-
-        <% if (image.description) { %>
-          <p>Description: <%= image.description %>
-          </p>
-          <% } %>
-            <p>Current Category: <%= image.category %>
-            </p>
-
+          <div class="image-actions">
             <a href="/images/<%= image._id %>/edit">
               <button>Edit image</button>
             </a>
-
             <form action="/images/<%= image._id %>?_method=DELETE" method="POST">
               <button type="submit">Delete this image</button>
             </form>
+          </div>
 
-
-
-            <div>Add a Comment</div>
+        <div class="image-and-comments-flex">
+          <div class="image-side">
+            <% if (image.image && image.image.data) { %>
+              <img src="/images/<%= image._id %>/image" alt="<%= image.title %>" style="max-width: 350px;" />
+            <% } else { %>
+              <span>No image uploaded.</span>
+            <% } %>
+          </div>
+          <div class="comment-side">
+            <h2>Add a Comment</h2>
             <form action="/images/<%= image._id %>/comments" method="POST">
               <textarea name="text" required></textarea>
-              <button type="submit">Add Comment</button>
+              <button type="submit">Submit</button>
             </form>
+          </div>
+        </div>
+          
+          
+          
+          
+          <div>
+            <h2>Comments</h2>
+            <% if (image.comments && image.comments.length> 0) { %>
+              <ul>
+                <% image.comments.forEach(function(comment) { %>
+                  <li>
+                    <%= comment.text %>
+                  </li>
+                  <% }) %>
+              </ul>
+              <% } else { %>
+                <p>No comments yet.</p>
+                <% } %>
+
+
+
+
+          </div>
+    </div>
 </body>
 
 </html>

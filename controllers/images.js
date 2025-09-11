@@ -1,15 +1,18 @@
-// Add a comment to an image
-
 const express = require("express");
 const router = express.Router();
-
-
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
+const upload = multer({ dest: "tmp/" });
 const User = require("../models/user.js");
 const Image = require("../models/image.js");
 const Comment = require("../models/comment.js");
 
+//-------------Routes-----------------------
+
+// Show all images for the current user
 router.get("/", async (req, res) => {
-  // Show all images for the current user
+
   try {
     const currentUser = await User.findById(req.session.user._id).populate("images");
     res.render("images/index.ejs", {
@@ -21,13 +24,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Show form to create a new image
 router.get("/new", (req, res) => {
-  // Show form to create a new image
     res.render("images/new.ejs");
 });
 
+// Show details for a single image
 router.get("/:imageId", async (req, res) => {
-  // Show details for a single image
   try {
     const imageData = await Image.findById(req.params.imageId).populate("comments");
     res.render("images/show.ejs", {
@@ -39,11 +42,40 @@ router.get("/:imageId", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  // Create a new image for the current user
+// Serve the actual image file
+router.get('/:imageId/image', async (req, res) => {
+  try {
+    const image = await Image.findById(req.params.imageId);
+    if (image && image.image && image.image.data) {
+      res.contentType(image.image.contentType);
+      res.send(image.image.data);
+    } else {
+      res.status(404).send('Image not found');
+    }
+  } catch (error) {
+    res.status(500).send('Error retrieving image');
+  }
+});
+
+// Handle image upload and creation
+router.post("/", upload.single("image"), async (req, res) => {
   try {
     const currentUser = await User.findById(req.session.user._id);
-    const newImage = await Image.create(req.body);
+    let imageData = {};
+    if (req.file) {
+      imageData = {
+        data: fs.readFileSync(req.file.path),
+        contentType: req.file.mimetype
+      };
+      // Optionally delete the temp file after reading
+      fs.unlinkSync(req.file.path);
+    }
+    const newImage = await Image.create({
+      title: req.body.title,
+      image: imageData,
+      description: req.body.description,
+      category: req.body.category
+    });
     currentUser.images.push(newImage._id); // Push only ObjectId
     await currentUser.save();
     res.redirect("/images");
@@ -53,8 +85,9 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+// Delete an image by its ID
 router.delete("/:imageId", async (req, res) => {
-  // Delete an image by its ID
   try {
     const currentUser = await User.findById(req.session.user._id);
     await Image.findByIdAndDelete(req.params.imageId);
@@ -67,8 +100,8 @@ router.delete("/:imageId", async (req, res) => {
   }
 });
 
+// Show form to edit an existing image
 router.get("/:imageId/edit", async (req, res) => {
-  // Show form to edit an existing image
   try {
     const image = await Image.findById(req.params.imageId);
     res.render("images/edit.ejs", {
@@ -80,8 +113,8 @@ router.get("/:imageId/edit", async (req, res) => {
   }
 });
 
+// Update an image by its ID
 router.put("/:imageId", async (req, res) => {
-  // Update an image by its ID
   try {
     await Image.findByIdAndUpdate(req.params.imageId, req.body);
     res.redirect(`/images/${req.params.imageId}`);
@@ -91,7 +124,7 @@ router.put("/:imageId", async (req, res) => {
   }
 });
 
-
+// Add a comment to an image
 router.post("/:imageId/comments", async (req, res) => {
   try {
     const image = await Image.findById(req.params.imageId);

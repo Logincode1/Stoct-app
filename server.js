@@ -1,5 +1,4 @@
 const dotenv = require("dotenv");
-dotenv.config();
 const express = require("express");
 const app = express();
 const db = require("./db/connection.js");
@@ -8,16 +7,13 @@ const morgan = require("morgan");
 const session = require("express-session");
 const isSignedIn = require("./middleware/is-signed-in.js");
 const passUserToView = require("./middleware/pass-user-to-view.js");
-
 const authController = require("./controllers/auth.js");
 const imagesController = require("./controllers/images.js");
-
 const port = process.env.PORT ? process.env.PORT : "3000";
 
-app.use(express.urlencoded({ extended: false })); // Allows us to parse form data and include in request body
-app.use(methodOverride("_method")); // "Tricks" Express into allowing PUT and DELETE requests from forms
-app.use(morgan("dev")); // Logger
+dotenv.config();
 
+// Session middleware setup
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -25,15 +21,13 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(express.static(__dirname + '/public'));
-app.use(passUserToView);
-app.use("/auth", authController);
-app.use(isSignedIn);
-
-app.use("/images", imagesController);
-
-
-
+app.use(express.urlencoded({ extended: false })); //Analyzes the body of requests
+app.use(methodOverride("_method"));               // Allows PUT and DELETE methods in forms
+app.use(morgan("dev"));                           // Logs requests to the console
+app.use(express.static(__dirname + '/public'));   // Serve static files from the "public" directory
+app.use(passUserToView);                          // Middleware to pass user info to views           
+app.use("/auth", authController);                 // Routes for authentication
+// Home route
 app.get("/", (req, res) => {
   // Check if the user is signed in
   if (req.session.user) {
@@ -45,7 +39,13 @@ app.get("/", (req, res) => {
   }
 });
 
+app.use(isSignedIn);                              // Middleware to protect routes below  
+app.use("/images", imagesController);             // Routes for image management
 
+
+
+
+// Start the server after the database connection is established
 db.on("connected", () => {
   console.clear();
   console.log(`Connected to MongoDB.`);
