@@ -8,6 +8,7 @@
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
+    <div style="height:56px;"></div>
   <h1>Edit <%= image.title %>
 
   <form action="/images/<%= image._id %>?_method=PUT" method="POST">

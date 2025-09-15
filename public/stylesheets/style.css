@@ -28,6 +28,7 @@ display: flex;
 }
 
 body {
+  margin-top: 50px;
   background: #f9f9f98c;
   font-family: 'Roboto', Arial, sans-serif;
   color: #222;
@@ -36,6 +37,10 @@ body {
 }
 
 nav {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px; 
   background: #e4e0e0;
   border-bottom: 1px solid #e5e5e5;
   display: flex;

@@ -74,7 +74,8 @@ router.post("/", upload.single("image"), async (req, res) => {
       title: req.body.title,
       image: imageData,
       description: req.body.description,
-      category: req.body.category
+      category: req.body.category,
+      userId: currentUser._id 
     });
     currentUser.images.push(newImage._id); // Push only ObjectId
     await currentUser.save();
@@ -89,8 +90,13 @@ router.post("/", upload.single("image"), async (req, res) => {
 // Delete an image by its ID
 router.delete("/:imageId", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.session.user._id);
+    const image = await Image.findById(req.params.imageId);
+    if (!image) return res.status(404).send("Image not found");
+    if (image.userId.toString() !== req.session.user._id.toString()) {
+      return res.status(403).send("Forbidden: You cannot delete this image");
+    }
     await Image.findByIdAndDelete(req.params.imageId);
+    const currentUser = await User.findById(req.session.user._id);
     currentUser.images.pull(req.params.imageId);
     await currentUser.save();
     res.redirect("/images");
@@ -104,6 +110,10 @@ router.delete("/:imageId", async (req, res) => {
 router.get("/:imageId/edit", async (req, res) => {
   try {
     const image = await Image.findById(req.params.imageId);
+    if (!image) return res.status(404).send("Image not found");
+    if (image.userId.toString() !== req.session.user._id.toString()) {
+      return res.status(403).send("Forbidden: You cannot edit this image");
+    }
     res.render("images/edit.ejs", {
       image: image,
     });
@@ -116,6 +126,11 @@ router.get("/:imageId/edit", async (req, res) => {
 // Update an image by its ID
 router.put("/:imageId", async (req, res) => {
   try {
+    const image = await Image.findById(req.params.imageId);
+    if (!image) return res.status(404).send("Image not found");
+    if (image.userId.toString() !== req.session.user._id.toString()) {
+      return res.status(403).send("Forbidden: You cannot update this image");
+    }
     await Image.findByIdAndUpdate(req.params.imageId, req.body);
     res.redirect(`/images/${req.params.imageId}`);
   } catch (error) {

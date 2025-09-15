@@ -10,7 +10,8 @@ const imageSchema = new mongoose.Schema({
 		type: String,
 		enum: ["personal", "professional", "art", "meme"],
 	},
-	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }]
+	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+	userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 });
 const Image = mongoose.model("Image", imageSchema);
 

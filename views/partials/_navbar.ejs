@@ -1,11 +1,19 @@
 <!-- views/partials/_navbar.ejs -->
 
-<nav>
+<Head>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+</Head>
+
+<nav id="navbar">
   <% if(user) { %>
   <a id="your-images" href="/images">Your Images</a>
   <a id="sign-out" href="/auth/sign-out">Sign Out</a>
+  <a id="profiles" href="/views/user-profiles.ejs">Profiles</a>
   <% } else { %>
   <a id="sign-in" href="/auth/sign-in">Sign In</a>
   <a id="sign-up" href="/auth/sign-up">Sign Up</a>
   <% } %>
 </nav>
+
+
+
