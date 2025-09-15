@@ -10,13 +10,18 @@ const Comment = require("../models/comment.js");
 
 //-------------Routes-----------------------
 
-// Show all images for the current user
+// Show all images for the current user or a specific user
 router.get("/", async (req, res) => {
-
   try {
-    const currentUser = await User.findById(req.session.user._id).populate("images");
+    let userId = req.query.userId || req.session.user._id;
+    const user = await User.findById(userId).populate("images");
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
     res.render("images/index.ejs", {
-      images: currentUser.images,
+      images: user.images,
+      currentUserId: req.session.user._id,
+      viewedUserId: user._id,
     });
   } catch (error) {
     console.log(error);
@@ -155,4 +160,8 @@ router.post("/:imageId/comments", async (req, res) => {
     res.redirect(`/images/${req.params.imageId}`);
   }
 });
+
+// 
+
+
 module.exports = router;

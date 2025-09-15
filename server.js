@@ -44,6 +44,16 @@ app.use("/images", imagesController);             // Routes for image management
 
 
 
+// Route to render user-profiles.ejs
+const User = require("./models/user.js");
+app.get("/profiles", async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.render("user-profiles.ejs", { users });
+  } catch (err) {
+    res.status(500).send("Error fetching users");
+  }
+});
 
 // Start the server after the database connection is established
 db.on("connected", () => {

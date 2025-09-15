@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profiles</title>
@@ -10,7 +11,7 @@
     <ul>
         <% users.forEach(user => { %>
             <li>
-                <a href="/users/<%= user._id %>"><%= user.username %></a>
+                <a href="/images?userId=<%= user._id %>"><%= user.username %></a>
             </li>
         <% }); %>
     </ul>

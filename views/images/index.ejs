@@ -10,11 +10,14 @@
     <%- include("../partials/_navbar.ejs") %>
     <div style="height:56px;"></div>
     <h1>Your Images</h1>
-    <div class="center-add-image">
-      <a href="/images/new">
-        <button>Add an Image</button>
-      </a>
-    </div>
+
+    <% if (currentUserId.toString() === viewedUserId.toString()) { %>
+      <div class="center-add-image">
+        <a href="/images/new">
+          <button>Add an Image</button>
+        </a>
+      </div>
+    <% } %>
 
     <ul>
   <% images.forEach((image)=>{ %>
