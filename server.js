@@ -27,14 +27,12 @@ app.use(morgan("dev"));                           // Logs requests to the consol
 app.use(express.static(__dirname + '/public'));   // Serve static files from the "public" directory
 app.use(passUserToView);                          // Middleware to pass user info to views           
 app.use("/auth", authController);                 // Routes for authentication
+
 // Home route
 app.get("/", (req, res) => {
-  // Check if the user is signed in
   if (req.session.user) {
-  // Redirect signed-in users to their images index
   res.redirect("/images");
   } else {
-    // Show the homepage for users who are not signed in
     res.render("index.ejs");
   }
 });
@@ -60,7 +58,7 @@ db.on("connected", () => {
   console.clear();
   console.log(`Connected to MongoDB.`);
   app.listen(port, () => {
-    console.log(`The express app is ready on port ${port}!`);
+    console.log(`Ready on port ${port}!`);
   });
 });
 

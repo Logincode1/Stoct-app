@@ -9,10 +9,9 @@
     <%= image.title %>
   </title>
 </head>
-
 <body>
   <%- include('../partials/_navbar.ejs') %>
-  <div style="height:56px;"></div>
+    <div style="height:56px;"></div>
     <div class="center-show-page">
       <h1>
         <%= image.title %>
@@ -24,7 +23,6 @@
             Category: <%= image.category %>
         </p>
         <% } %>
-
           <div class="image-actions">
             <a href="/images/<%= image._id %>/edit">
               <button>Edit image</button>
@@ -34,26 +32,22 @@
             </form>
           </div>
 
-        <div class="image-and-comments-flex">
-          <div class="image-side">
-            <% if (image.image && image.image.data) { %>
-              <img src="/images/<%= image._id %>/image" alt="<%= image.title %>" style="max-width: 350px;" />
-            <% } else { %>
-              <span>No image uploaded.</span>
-            <% } %>
+          <div class="image-and-comments-flex">
+            <div class="image-side">
+              <% if (image.image && image.image.data) { %>
+                <img src="/images/<%= image._id %>/image" alt="<%= image.title %>" style="max-width: 350px;" />
+                <% } else { %>
+                  <span>No image uploaded.</span>
+                  <% } %>
+            </div>
+            <div class="comment-side">
+              <h2>Add a Comment</h2>
+              <form action="/images/<%= image._id %>/comments" method="POST">
+                <textarea name="text" required></textarea>
+                <button type="submit">Submit</button>
+              </form>
+            </div>
           </div>
-          <div class="comment-side">
-            <h2>Add a Comment</h2>
-            <form action="/images/<%= image._id %>/comments" method="POST">
-              <textarea name="text" required></textarea>
-              <button type="submit">Submit</button>
-            </form>
-          </div>
-        </div>
-          
-          
-          
-          
           <div>
             <h2>Comments</h2>
             <% if (image.comments && image.comments.length> 0) { %>
@@ -67,10 +61,6 @@
               <% } else { %>
                 <p>No comments yet.</p>
                 <% } %>
-
-
-
-
           </div>
     </div>
 </body>
